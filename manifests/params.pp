@@ -17,11 +17,13 @@ class nfs::params {
   ### Application related parameters
 
   $package = $::operatingsystem ? {
-    default => 'nfs',
+    /(?i:Debian|Ubuntu|Mint)/ => [ 'nfs-common' , 'nfs-kernel-server' ],
+    default                   => 'nfs-utils',
   }
 
   $service = $::operatingsystem ? {
-    default => 'nfs',
+    /(?i:Debian|Ubuntu|Mint)/ => 'nfs-kernel-server',
+    default                   => 'nfs',
   }
 
   $service_status = $::operatingsystem ? {
@@ -37,7 +39,7 @@ class nfs::params {
   }
 
   $process_user = $::operatingsystem ? {
-    default => 'nfs',
+    default => 'root',
   }
 
   $config_dir = $::operatingsystem ? {
@@ -45,7 +47,7 @@ class nfs::params {
   }
 
   $config_file = $::operatingsystem ? {
-    default => '/etc/nfs/nfs.conf',
+    default => '/etc/exports',
   }
 
   $config_file_mode = $::operatingsystem ? {
@@ -66,11 +68,11 @@ class nfs::params {
   }
 
   $pid_file = $::operatingsystem ? {
-    default => '/var/run/nfs.pid',
+    default => '/var/run/nfsd.pid',
   }
 
   $data_dir = $::operatingsystem ? {
-    default => '/etc/nfs',
+    default => '/var/lib/nfs',
   }
 
   $log_dir = $::operatingsystem ? {
@@ -81,7 +83,7 @@ class nfs::params {
     default => '/var/log/nfs/nfs.log',
   }
 
-  $port = '42'
+  $port = '2049'
   $protocol = 'tcp'
 
   # General Settings
