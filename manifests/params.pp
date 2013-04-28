@@ -31,6 +31,7 @@ class nfs::params {
   }
 
   $process = $::operatingsystem ? {
+    /(?i:Debian|Ubuntu|Mint)/ => 'nfsd',
     default => 'nfs',
   }
 
