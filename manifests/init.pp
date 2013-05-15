@@ -5,6 +5,12 @@
 #
 # == Parameters
 #
+# [*mode*]
+#   Define the operational mode.
+#   Valid values: client | server
+#   If you set server also the client stuff is installed
+#   Default: server
+#
 # Standard class parameters
 # Define the general class behaviour and customizations
 #
@@ -197,19 +203,10 @@
 #   Can be defined also by the (top scope) variable $nfs_protocol
 #
 #
-# == Examples
-#
-# You can use this class in 2 ways:
-# - Set variables (at top scope level on in a ENC) and "include nfs"
-# - Call nfs as a parametrized class
-#
-# See README for details.
-#
-#
-# == Author
-#   Alessandro Franceschi <al@lab42.it/>
+# See README for usage patterns.
 #
 class nfs (
+  $mode                = params_lookup( 'mode' ),
   $my_class            = params_lookup( 'my_class' ),
   $source              = params_lookup( 'source' ),
   $source_dir          = params_lookup( 'source_dir' ),
@@ -335,54 +332,11 @@ class nfs (
     default   => template($nfs::template),
   }
 
-  ### Managed resources
-  package { $nfs::package:
-    ensure  => $nfs::manage_package,
-    noop    => $nfs::bool_noops,
-  }
+  include nfs::client
 
-  service { 'nfs':
-    ensure     => $nfs::manage_service_ensure,
-    name       => $nfs::service,
-    enable     => $nfs::manage_service_enable,
-    hasstatus  => $nfs::service_status,
-    pattern    => $nfs::process,
-    require    => Package[$nfs::package],
-    noop       => $nfs::bool_noops,
+  if $nfs::mode == 'server' {
+    include nfs::server
   }
-
-  file { 'nfs.conf':
-    ensure  => $nfs::manage_file,
-    path    => $nfs::config_file,
-    mode    => $nfs::config_file_mode,
-    owner   => $nfs::config_file_owner,
-    group   => $nfs::config_file_group,
-    require => Package[$nfs::package],
-    notify  => $nfs::manage_service_autorestart,
-    source  => $nfs::manage_file_source,
-    content => $nfs::manage_file_content,
-    replace => $nfs::manage_file_replace,
-    audit   => $nfs::manage_audit,
-    noop    => $nfs::bool_noops,
-  }
-
-  # The whole nfs configuration directory can be recursively overriden
-  if $nfs::source_dir {
-    file { 'nfs.dir':
-      ensure  => directory,
-      path    => $nfs::config_dir,
-      require => Package[$nfs::package],
-      notify  => $nfs::manage_service_autorestart,
-      source  => $nfs::source_dir,
-      recurse => true,
-      purge   => $nfs::bool_source_dir_purge,
-      force   => $nfs::bool_source_dir_purge,
-      replace => $nfs::manage_file_replace,
-      audit   => $nfs::manage_audit,
-      noop    => $nfs::bool_noops,
-    }
-  }
-
 
   ### Include custom class if $my_class is set
   if $nfs::my_class {
@@ -398,49 +352,6 @@ class nfs (
       variables => $classvars,
       helper    => $nfs::puppi_helper,
       noop      => $nfs::bool_noops,
-    }
-  }
-
-
-  ### Service monitoring, if enabled ( monitor => true )
-  if $nfs::bool_monitor == true {
-    if $nfs::port != '' {
-      monitor::port { "nfs_${nfs::protocol}_${nfs::port}":
-        protocol => $nfs::protocol,
-        port     => $nfs::port,
-        target   => $nfs::monitor_target,
-        tool     => $nfs::monitor_tool,
-        enable   => $nfs::manage_monitor,
-        noop     => $nfs::bool_noops,
-      }
-    }
-    if $nfs::service != '' {
-      monitor::process { 'nfs_process':
-        process  => $nfs::process,
-        service  => $nfs::service,
-        pidfile  => $nfs::pid_file,
-        user     => $nfs::process_user,
-        argument => $nfs::process_args,
-        tool     => $nfs::monitor_tool,
-        enable   => $nfs::manage_monitor,
-        noop     => $nfs::bool_noops,
-      }
-    }
-  }
-
-
-  ### Firewall management, if enabled ( firewall => true )
-  if $nfs::bool_firewall == true and $nfs::port != '' {
-    firewall { "nfs_${nfs::protocol}_${nfs::port}":
-      source      => $nfs::firewall_src,
-      destination => $nfs::firewall_dst,
-      protocol    => $nfs::protocol,
-      port        => $nfs::port,
-      action      => 'allow',
-      direction   => 'input',
-      tool        => $nfs::firewall_tool,
-      enable      => $nfs::manage_firewall,
-      noop        => $nfs::bool_noops,
     }
   }
 

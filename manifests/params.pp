@@ -16,9 +16,16 @@ class nfs::params {
 
   ### Application related parameters
 
+  $mode = 'server'
+
   $package = $::operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => [ 'nfs-common' , 'nfs-kernel-server' ],
+    /(?i:Debian|Ubuntu|Mint)/ => 'nfs-common',
     default                   => 'nfs-utils',
+  }
+
+  $package_server = $::operatingsystem ? {
+    /(?i:Debian|Ubuntu|Mint)/ => 'nfs-kernel-server',
+    default                   => ''
   }
 
   $service = $::operatingsystem ? {
@@ -31,7 +38,6 @@ class nfs::params {
   }
 
   $process = $::operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => 'nfsd',
     default => 'nfs',
   }
 
@@ -44,7 +50,7 @@ class nfs::params {
   }
 
   $config_dir = $::operatingsystem ? {
-    default => '/etc/nfs',
+    default => '',
   }
 
   $config_file = $::operatingsystem ? {
@@ -69,11 +75,11 @@ class nfs::params {
   }
 
   $pid_file = $::operatingsystem ? {
-    default => '/var/run/nfsd.pid',
+    default => '/var/run/nfs.pid',
   }
 
   $data_dir = $::operatingsystem ? {
-    default => '/var/lib/nfs',
+    default => '/etc/nfs',
   }
 
   $log_dir = $::operatingsystem ? {
