@@ -38,7 +38,8 @@ class nfs::params {
   }
 
   $process = $::operatingsystem ? {
-    default => 'nfs',
+    /(?i:RedHat|Centos|Scientific)/ => 'nfsd',
+    default                         => 'nfs',
   }
 
   $process_args = $::operatingsystem ? {
