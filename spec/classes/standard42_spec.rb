@@ -7,7 +7,7 @@ describe 'nfs' do
   let(:facts) { { :ipaddress => '10.42.42.42' } }
 
   describe 'Test standard installation' do
-    it { should contain_package('nfs').with_ensure('present') }
+    it { should contain_package('nfs-utils').with_ensure('present') }
     it { should contain_service('nfs').with_ensure('running') }
     it { should contain_service('nfs').with_enable('true') }
     it { should contain_file('nfs.conf').with_ensure('present') }
@@ -15,12 +15,12 @@ describe 'nfs' do
 
   describe 'Test installation of a specific version' do
     let(:params) { {:version => '1.0.42' } }
-    it { should contain_package('nfs').with_ensure('1.0.42') }
+    it { should contain_package('nfs-utils').with_ensure('1.0.42') }
   end
 
   describe 'Test standard installation with monitoring and firewalling' do
     let(:params) { {:monitor => true , :firewall => true, :port => '42', :protocol => 'tcp' } }
-    it { should contain_package('nfs').with_ensure('present') }
+    it { should contain_package('nfs-utils').with_ensure('present') }
     it { should contain_service('nfs').with_ensure('running') }
     it { should contain_service('nfs').with_enable('true') }
     it { should contain_file('nfs.conf').with_ensure('present') }
@@ -30,7 +30,7 @@ describe 'nfs' do
 
   describe 'Test decommissioning - absent' do
     let(:params) { {:absent => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
-    it 'should remove Package[nfs]' do should contain_package('nfs').with_ensure('absent') end
+    it 'should remove Package[nfs]' do should contain_package('nfs-utils').with_ensure('absent') end
     it 'should stop Service[nfs]' do should contain_service('nfs').with_ensure('stopped') end
     it 'should not enable at boot Service[nfs]' do should contain_service('nfs').with_enable('false') end
     it 'should remove nfs configuration file' do should contain_file('nfs.conf').with_ensure('absent') end
@@ -40,7 +40,7 @@ describe 'nfs' do
 
   describe 'Test decommissioning - disable' do
     let(:params) { {:disable => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
-    it { should contain_package('nfs').with_ensure('present') }
+    it { should contain_package('nfs-utils').with_ensure('present') }
     it 'should stop Service[nfs]' do should contain_service('nfs').with_ensure('stopped') end
     it 'should not enable at boot Service[nfs]' do should contain_service('nfs').with_enable('false') end
     it { should contain_file('nfs.conf').with_ensure('present') }
@@ -50,7 +50,7 @@ describe 'nfs' do
 
   describe 'Test decommissioning - disableboot' do
     let(:params) { {:disableboot => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
-    it { should contain_package('nfs').with_ensure('present') }
+    it { should contain_package('nfs-utils').with_ensure('present') }
     it { should_not contain_service('nfs').with_ensure('present') }
     it { should_not contain_service('nfs').with_ensure('absent') }
     it 'should not enable at boot Service[nfs]' do should contain_service('nfs').with_enable('false') end
@@ -61,7 +61,7 @@ describe 'nfs' do
 
   describe 'Test noops mode' do
     let(:params) { {:noops => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
-    it { should contain_package('nfs').with_noop('true') }
+    it { should contain_package('nfs-utils').with_noop('true') }
     it { should contain_service('nfs').with_noop('true') }
     it { should contain_file('nfs.conf').with_noop('true') }
     it { should contain_monitor__process('nfs_process').with_noop('true') }
@@ -85,18 +85,6 @@ describe 'nfs' do
   describe 'Test customizations - source' do
     let(:params) { {:source => "puppet:///modules/nfs/spec"} }
     it { should contain_file('nfs.conf').with_source('puppet:///modules/nfs/spec') }
-  end
-
-  describe 'Test customizations - source_dir' do
-    let(:params) { {:source_dir => "puppet:///modules/nfs/dir/spec" , :source_dir_purge => true } }
-    it { should contain_file('nfs.dir').with_source('puppet:///modules/nfs/dir/spec') }
-    it { should contain_file('nfs.dir').with_purge('true') }
-    it { should contain_file('nfs.dir').with_force('true') }
-  end
-
-  describe 'Test customizations - custom class' do
-    let(:params) { {:my_class => "nfs::spec" } }
-    it { should contain_file('nfs.conf').with_content(/rspec.example42.com/) }
   end
 
   describe 'Test service autorestart' do
