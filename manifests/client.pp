@@ -8,7 +8,7 @@ class nfs::client {
 
   package { $nfs::package:
     ensure  => $nfs::manage_package,
-    noop    => $nfs::bool_noops,
+    noop    => $nfs::noops,
   }
 
 }
