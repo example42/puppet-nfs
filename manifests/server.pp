@@ -4,7 +4,7 @@
 #
 class nfs::server {
 
-  require nfs 
+  require nfs
 
   if $nfs::package_server != '' {
     package { $nfs::package_server:
@@ -39,7 +39,7 @@ class nfs::server {
   }
 
   # The whole nfs configuration directory can be recursively overriden
-  if $nfs::source_dir 
+  if $nfs::source_dir
   and $nfs::config_dir != '' {
     file { 'nfs.dir':
       ensure  => directory,
