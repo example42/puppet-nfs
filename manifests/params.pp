@@ -29,8 +29,9 @@ class nfs::params {
   }
 
   $service = $::operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => 'nfs-kernel-server',
-    default                   => 'nfs',
+    /(?i:Debian|Ubuntu|Mint)/       => 'nfs-kernel-server',
+    /(?i:RedHat|Centos|Scientific)/ => 'nfs-server',
+    default                         => 'nfs',
   }
 
   $service_status = $::operatingsystem ? {
