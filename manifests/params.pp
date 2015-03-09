@@ -107,6 +107,7 @@ class nfs::params {
   $absent = false
   $disable = false
   $disableboot = false
+  $mounts = {}
 
   ### General module variables that can have a site or per module default
   $monitor = false
