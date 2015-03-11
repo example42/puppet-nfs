@@ -247,7 +247,8 @@ class nfs (
   $log_dir             = params_lookup( 'log_dir' ),
   $log_file            = params_lookup( 'log_file' ),
   $port                = params_lookup( 'port' ),
-  $protocol            = params_lookup( 'protocol' )
+  $protocol            = params_lookup( 'protocol' ),
+  $mounts              = params_lookup( 'mounts' )
   ) inherits nfs::params {
 
   $bool_source_dir_purge=any2bool($source_dir_purge)
@@ -354,6 +355,11 @@ class nfs (
     }
   }
 
+  ### Create instances for integration with Hiera
+  if $mounts != {} {
+    validate_hash($mounts)
+    create_resources(nfs::mount, $mounts)
+  }
 
   ### Debugging, if enabled ( debug => true )
   if $nfs::bool_debug == true {

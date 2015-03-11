@@ -4,7 +4,7 @@
 #
 class nfs::client {
 
-  require nfs
+  include nfs
 
   package { $nfs::package:
     ensure  => $nfs::manage_package,
