@@ -8,19 +8,19 @@ class nfs::server {
 
   if $nfs::package_server != '' {
     package { $nfs::package_server:
-      ensure  => $nfs::manage_package,
-      noop    => $nfs::noops,
+      ensure => $nfs::manage_package,
+      noop   => $nfs::noops,
     }
   }
 
   service { 'nfs':
-    ensure     => $nfs::manage_service_ensure,
-    name       => $nfs::service,
-    enable     => $nfs::manage_service_enable,
-    hasstatus  => $nfs::service_status,
-    pattern    => $nfs::process,
-    require    => Package[$nfs::package],
-    noop       => $nfs::noops,
+    ensure    => $nfs::manage_service_ensure,
+    name      => $nfs::service,
+    enable    => $nfs::manage_service_enable,
+    hasstatus => $nfs::service_status,
+    pattern   => $nfs::process,
+    require   => Package[$nfs::package],
+    noop      => $nfs::noops,
   }
 
   file { 'nfs.conf':

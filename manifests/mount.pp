@@ -1,3 +1,4 @@
+#
 define nfs::mount(
   $server,
   $share,
@@ -18,12 +19,12 @@ define nfs::mount(
   }
 
   mount {"shared ${share} by ${server}":
-    device      => "${server}:${share}",
-    fstype      => 'nfs',
-    name        => $real_mountpoint,
-    options     => $client_options,
-    remounts    => false,
-    atboot      => true,
+    device   => "${server}:${share}",
+    fstype   => 'nfs',
+    name     => $real_mountpoint,
+    options  => $client_options,
+    remounts => false,
+    atboot   => true,
   }
 
   case $ensure {
@@ -43,6 +44,8 @@ define nfs::mount(
         ensure => unmounted,
       }
     }
+
+    default: { }
   }
 
 }

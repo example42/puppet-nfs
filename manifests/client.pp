@@ -7,8 +7,8 @@ class nfs::client {
   include nfs
 
   package { $nfs::package:
-    ensure  => $nfs::manage_package,
-    noop    => $nfs::noops,
+    ensure => $nfs::manage_package,
+    noop   => $nfs::noops,
   }
 
 }
