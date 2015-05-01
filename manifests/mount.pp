@@ -32,6 +32,7 @@ define nfs::mount(
       exec {"create ${real_mountpoint} and parents":
         command => "mkdir -p ${real_mountpoint}",
         unless  => "test -d ${real_mountpoint}",
+        path    => "/bin:/usr/bin:/usr/local/bin"
       }
       Mount["shared ${share} by ${server}"] {
         require => [Exec["create ${real_mountpoint} and parents"], Class['nfs::client']],
