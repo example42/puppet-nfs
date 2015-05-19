@@ -100,7 +100,8 @@ class nfs::params {
   $source = ''
   $source_dir = ''
   $source_dir_purge = false
-  $template = ''
+  $manage_config_file = true
+  $template = 'nfs/export.erb'
   $options = ''
   $service_autorestart = true
   $version = 'present'
