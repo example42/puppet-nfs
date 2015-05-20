@@ -70,9 +70,9 @@ If the mountpoint directory does not exist it will be created along with any par
           hosts => [{                 # Hosts must be wrapped in [] even if it is a single entry
             'host' => '*',            # Host can be '*', IP, IP w/ netmask, or hostname
             'options' => 'ro,fsid=0'  # Host specific nfs options
-          },
+          }],
           order => 10                 # Optional, order to arrange export entries. Defaults to 100
-        }]
+        }
 
 * Another example with multiple access control entries
 
