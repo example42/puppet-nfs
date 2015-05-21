@@ -7,7 +7,7 @@ define nfs::export(
   include nfs
   include nfs::params
 
-  if $nfs::manage_file == false {
+  if $nfs::manage_config_file == false {
     warn('nfs::manage_config_file has been disabled. This resource is now unused!')
   } else {
     validate_absolute_path($mount_point)
