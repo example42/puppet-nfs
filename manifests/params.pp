@@ -109,6 +109,7 @@ class nfs::params {
   $disable = false
   $disableboot = false
   $mounts = {}
+  $aggregate = false # controls concatination of the nfs_cfg file
 
   ### General module variables that can have a site or per module default
   $monitor = false

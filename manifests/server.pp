@@ -23,7 +23,8 @@ class nfs::server {
     noop      => $nfs::noops,
   }
 
-  if $nfs::manage_config_file {
+  if $nfs::manage_config_file
+  and $nfs::aggregate {
     concat { $nfs::config_file:
       ensure  => $nfs::manage_file,
       mode    => $nfs::config_file_mode,
@@ -38,6 +39,23 @@ class nfs::server {
       noop    => $nfs::noops,
     }
   }
+  else {
+    file { $nfs::config_file:
+      ensure  => $nfs::manage_file,
+      path    => $nfs::config_file,
+      mode    => $nfs::config_file_mode,
+      owner   => $nfs::config_file_owner,
+      group   => $nfs::config_file_group,
+      require => Package[$nfs::package],
+      notify  => $nfs::manage_service_autorestart,
+      source  => $nfs::manage_file_source,
+      content => $nfs::manage_file_content,
+      replace => $nfs::manage_file_replace,
+      audit   => $nfs::manage_audit,
+      noop    => $nfs::noops,
+    }
+  }
+
 
   # The whole nfs configuration directory can be recursively overriden
   if $nfs::source_dir
