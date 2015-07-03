@@ -100,7 +100,8 @@ class nfs::params {
   $source = ''
   $source_dir = ''
   $source_dir_purge = false
-  $template = ''
+  $manage_config_file = true
+  $template = 'nfs/export.erb'
   $options = ''
   $service_autorestart = true
   $version = 'present'
@@ -108,6 +109,7 @@ class nfs::params {
   $disable = false
   $disableboot = false
   $mounts = {}
+  $aggregate = false # controls concatination of the nfs_cfg file
 
   ### General module variables that can have a site or per module default
   $monitor = false

@@ -82,6 +82,34 @@ For detailed info about the logic and usage patterns of Example42 modules check 
 'client_options' is a passthrough to the [mount type options attribute] (https://docs.puppetlabs.com/references/latest/type.html#mount-attribute-options).
 If the mountpoint directory does not exist it will be created along with any parent directories that don't exist, essentially 'mkdir -p $mountpoint'.
 
+* Exporting NFS shares (server only)
+
+        nfs::export { '/var/log':
+          hosts => [{                 # Hosts must be wrapped in [] even if it is a single entry
+            'host' => '*',            # Host can be '*', IP, IP w/ netmask, or hostname
+            'options' => 'ro,fsid=0'  # Host specific nfs options
+          }],
+          order => 10                 # Optional, order to arrange export entries. Defaults to 100
+        }
+
+* Another example with multiple access control entries
+
+        nfs::export { '/opt/tomcat/webapps':
+          hosts => [
+            {
+              'host' => 'host.example.com',
+              'options' => 'rw'
+            },
+            {
+              'host' => '192.168.56.0/24',
+              'options' => 'rw,sync'
+            },
+            {
+              'host' => '*',
+              'options' => 'ro,fsid=0'
+            }
+          ]
+        }
 
 ## USAGE - Overrides and Customizations
 * Use custom sources for main config file 

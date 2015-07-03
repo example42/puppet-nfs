@@ -242,6 +242,7 @@ class nfs (
   $config_file_owner   = params_lookup( 'config_file_owner' ),
   $config_file_group   = params_lookup( 'config_file_group' ),
   $config_file_init    = params_lookup( 'config_file_init' ),
+  $manage_config_file  = params_lookup( 'manage_config_file' ),
   $pid_file            = params_lookup( 'pid_file' ),
   $data_dir            = params_lookup( 'data_dir' ),
   $log_dir             = params_lookup( 'log_dir' ),
@@ -325,11 +326,6 @@ class nfs (
   $manage_file_source = $nfs::source ? {
     ''        => undef,
     default   => $nfs::source,
-  }
-
-  $manage_file_content = $nfs::template ? {
-    ''        => undef,
-    default   => template($nfs::template),
   }
 
   include nfs::client
