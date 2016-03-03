@@ -134,7 +134,7 @@
 # [*noops*]
 #   Set noop metaparameter to true for all the resources managed by the module.
 #   Basically you can run a dryrun for this specific module if you set
-#   this to true. Default: undef
+#   this to true. Default: false
 #
 # Default class params - As defined in nfs::params.
 # Note that these variables are mostly defined and used in the module itself,
