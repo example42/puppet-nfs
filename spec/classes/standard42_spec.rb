@@ -59,17 +59,6 @@ describe 'nfs' do
     it { should contain_firewall('nfs_tcp_42').with_enable('true') }
   end
 
-  describe 'Test noops mode' do
-    let(:params) { {:noops => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
-    it { should contain_package('nfs-utils').with_noop('true') }
-    it { should contain_service('nfs').with_noop('true') }
-    it { should contain_file('nfs.conf').with_noop('true') }
-    it { should contain_monitor__process('nfs_process').with_noop('true') }
-    it { should contain_monitor__process('nfs_process').with_noop('true') }
-    it { should contain_monitor__port('nfs_tcp_42').with_noop('true') }
-    it { should contain_firewall('nfs_tcp_42').with_noop('true') }
-  end
-
   describe 'Test customizations - template' do
     let(:params) { {:template => "nfs/spec.erb" , :options => { 'opt_a' => 'value_a' } } }
     it 'should generate a valid template' do

@@ -131,11 +131,6 @@
 #   Can be defined also by the (top scope) variables $nfs_audit_only
 #   and $audit_only
 #
-# [*noops*]
-#   Set noop metaparameter to true for all the resources managed by the module.
-#   Basically you can run a dryrun for this specific module if you set
-#   this to true. Default: undef
-#
 # Default class params - As defined in nfs::params.
 # Note that these variables are mostly defined and used in the module itself,
 # overriding the default values might not affected all the involved components.
@@ -229,7 +224,6 @@ class nfs (
   $firewall_dst        = params_lookup( 'firewall_dst' , 'global' ),
   $debug               = params_lookup( 'debug' , 'global' ),
   $audit_only          = params_lookup( 'audit_only' , 'global' ),
-  $noops               = params_lookup( 'noops' ),
   $package             = params_lookup( 'package' ),
   $service             = params_lookup( 'service' ),
   $service_status      = params_lookup( 'service_status' ),
@@ -351,7 +345,6 @@ class nfs (
       ensure    => $nfs::manage_file,
       variables => $classvars,
       helper    => $nfs::puppi_helper,
-      noop      => $nfs::noops,
     }
   }
 
@@ -370,7 +363,6 @@ class nfs (
       owner   => 'root',
       group   => 'root',
       content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
-      noop    => $nfs::noops,
     }
   }
 
