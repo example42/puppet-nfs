@@ -9,7 +9,6 @@ class nfs::server {
   if $nfs::package_server != '' {
     package { $nfs::package_server:
       ensure => $nfs::manage_package,
-      noop   => $nfs::noops,
     }
   }
 
@@ -20,7 +19,6 @@ class nfs::server {
     hasstatus => $nfs::service_status,
     pattern   => $nfs::process,
     require   => Package[$nfs::package],
-    noop      => $nfs::noops,
   }
 
   file { 'nfs.conf':
@@ -35,7 +33,6 @@ class nfs::server {
     content => $nfs::manage_file_content,
     replace => $nfs::manage_file_replace,
     audit   => $nfs::manage_audit,
-    noop    => $nfs::noops,
   }
 
   # The whole nfs configuration directory can be recursively overriden
@@ -52,7 +49,6 @@ class nfs::server {
       force   => $nfs::bool_source_dir_purge,
       replace => $nfs::manage_file_replace,
       audit   => $nfs::manage_audit,
-      noop    => $nfs::noops,
     }
   }
 
@@ -66,7 +62,6 @@ class nfs::server {
         target   => $nfs::monitor_target,
         tool     => $nfs::monitor_tool,
         enable   => $nfs::manage_monitor,
-        noop     => $nfs::noops,
       }
     }
     if $nfs::service != '' {
@@ -78,7 +73,6 @@ class nfs::server {
         argument => $nfs::process_args,
         tool     => $nfs::monitor_tool,
         enable   => $nfs::manage_monitor,
-        noop     => $nfs::noops,
       }
     }
   }
@@ -95,7 +89,6 @@ class nfs::server {
       direction   => 'input',
       tool        => $nfs::firewall_tool,
       enable      => $nfs::manage_firewall,
-      noop        => $nfs::noops,
     }
   }
 
